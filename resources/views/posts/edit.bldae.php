@@ -13,14 +13,14 @@
     </div>
 
     <div>
-        <label for="music">Music (optional):</label>
+        <label for="music">Music:</label>
         <input type="file" name="music" id="music" accept="audio/*">
     </div>
 
     <div>
-        <label for="photos">Photos (add more if needed):</label>
+        <label for="photos">Photos:</label>
         <input type="file" name="photos[]" id="photos" multiple accept="image/*">
     </div>
 
-    <button type="submit">Update Post</button>
+    <button type="submit">Edit</button>
 </form>

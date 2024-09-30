@@ -20,7 +20,7 @@
         <input type="file" name="photos[]" id="photos" multiple accept="image/*" required>
     </div>
 
-    <button type="submit">Create Post</button>
+    <button type="submit">Create</button>
 </form>
 
 <a href="{{ route('posts.index') }}">Back</a>
