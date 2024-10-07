@@ -23,4 +23,5 @@
     </div>
 
     <button type="submit">Edit</button>
+    <a href="{{ route('posts.show', $post->id) }}">Back</a>
 </form>

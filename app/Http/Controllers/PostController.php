@@ -15,6 +15,9 @@ class PostController extends Controller
     {
         $posts = Post::with('photos')->get(); // Mengambil semua postingan dengan relasi photos
         return view('posts.index', compact('posts'));
+
+        // $posts = Post::findOrFail($photo->post_id);
+        // return view('posts.index', compact('posts'));
     }
 
     /**
@@ -34,23 +37,36 @@ class PostController extends Controller
             'title' => 'required',
             'description' => 'nullable',
             'music' => 'nullable|file|mimes:mp3,wav',
-            'photos.*' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'photos.*' => 'required|file|mimes:jpeg,png,jpg,mp4,mov,avi',
         ]);
+
     
         // Simpan postingan
-        $post = Post::create([
-            'title' => $validated['title'],
-            'description' => $validated['description'],
+        $posts = Post::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'photo_path' => $request->file('photos') ? $request->file('photos')->store('photos') : null,
             'music' => $request->file('music') ? $request->file('music')->store('music') : null,
         ]);
     
         // Simpan foto-foto
-        if($request->hasFile('photos')) {
-            foreach ($request->file('photos') as $photo) {
-                $photoPath = $photo->store('photos');
+        // if($request->hasFile('photos')) {
+        //     foreach ($request->file('photos') as $photo) {
+        //         $photoPath = $photo->store('photos');
+        //         Photo::create([
+        //             'photo_path' => $photoPath,
+        //             'post_id' => $posts->id,
+        //         ]);
+        //     }
+        // }
+
+        if ($request->hasFile('photos')) {
+            foreach($request->file('photos') as $photo) {
+                $filename = time().'_'.$photo->getClientOriginalName();
+                $photo->storeAs('photos', $filename, 'public');
                 Photo::create([
-                    'photo_path' => $photoPath,
-                    'post_id' => $post->id,
+                    'photo_path' => $filename,
+                    'post_id' => $posts->id,
                 ]);
             }
         }
@@ -73,7 +89,7 @@ class PostController extends Controller
     public function edit(string $id)
     {
          // Temukan postingan berdasarkan ID
-        $post = Post::findOrFail($id);
+        $post = Post::find($id);
 
         // Mengarahkan ke halaman form edit
         return view('posts.edit', compact('post'));
@@ -91,23 +107,35 @@ class PostController extends Controller
     $validated = $request->validate([
         'title' => 'required',
         'description' => 'nullable',
-        'music' => 'nullable|file|mimes:mp3,wav',
-        'photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+        'music' => 'required|file|mimes:mp3,wav',
+        'photos.*' => 'required|image|mimes:jpeg,png,jpg,gif',
     ]);
 
     // Update postingan
     $post->update([
         'title' => $validated['title'],
         'description' => $validated['description'],
+        'photo_path' => $request->file('photos') ? $request->file('photos')->store('photos') : $post->photo_path,
         'music' => $request->file('music') ? $request->file('music')->store('music') : $post->music,
     ]);
 
     // Tambahkan foto baru jika ada
+    // if ($request->hasFile('photos')) {
+    //     foreach ($request->file('photos') as $photo) {
+    //         $photoPath = $photo->store('photos');
+    //         Photo::create([
+    //             'photo_path' => $photoPath,
+    //             'post_id' => $post->id,
+    //         ]);
+    //     }
+    // }
+
     if ($request->hasFile('photos')) {
-        foreach ($request->file('photos') as $photo) {
-            $photoPath = $photo->store('photos');
+        foreach($request->file('photos') as $photo) {
+            $filename = time().'_'.$photo->getClientOriginalName();
+            $photo->storeAs('photos', $filename, 'public');
             Photo::create([
-                'photo_path' => $photoPath,
+                'photo_path' => $filename,
                 'post_id' => $post->id,
             ]);
         }
