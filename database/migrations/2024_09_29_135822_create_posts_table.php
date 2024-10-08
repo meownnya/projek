@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->string('photo_path');
             $table->string('music')->nullable();
             $table->timestamps();
         });

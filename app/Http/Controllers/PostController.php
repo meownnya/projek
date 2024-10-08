@@ -42,11 +42,10 @@ class PostController extends Controller
 
     
         // Simpan postingan
-        $posts = Post::create([
+        $post = Post::create([
             'title' => $request->title,
             'description' => $request->description,
-            'photo_path' => $request->file('photos') ? $request->file('photos')->store('photos') : null,
-            'music' => $request->file('music') ? $request->file('music')->store('music') : null,
+            'music' => $request->file('music')->store('music', 'public'),
         ]);
     
         // Simpan foto-foto
@@ -66,7 +65,7 @@ class PostController extends Controller
                 $photo->storeAs('photos', $filename, 'public');
                 Photo::create([
                     'photo_path' => $filename,
-                    'post_id' => $posts->id,
+                    'post_id' => $post->id,
                 ]);
             }
         }
