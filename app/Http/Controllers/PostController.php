@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Photo;
 use App\Models\Post;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -23,23 +24,23 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'post_id' => 'required',
             'title' => 'required',
-            'description' => 'nullable',
-            'music' => 'nullable|file|mimes:mp3,wav',
-            'photos.*' => 'required|file|mimes:jpeg,png,jpg,mp4,mov,avi',
-        ]);
-
-        // Simpan postingan
-        $post = Post::create([
-            'post_id' => $request->post_id,
-            'title' => $request->title,
-            'description' => $request->description,
-
+            'description' => 'required',
+            'music' => 'nullable|mimes:mp3,wav|max:10000',
+            'photos.*' => 'required|mimes:jpg,jpeg,png|max:10000',
         ]);
 
         if ($request->hasFile('music')) {
-            $pathMusic = $request->file('music')->store('music', 'public');}
+            $audioPath = $request->file('music')->store('music', 'public');
+        }else {
+            $audioPath = null;
+        }
+
+        $post = Post::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'music' => $audioPath,
+        ]);
 
         if ($request->hasFile('photos')) {
             foreach($request->file('photos') as $photo) {
@@ -50,17 +51,13 @@ class PostController extends Controller
                     'post_id' => $post->id,
                 ]);
             }
+        Photo::create([
+            'photo_path' => $filename,
+            'post_id' => $post->id,
+        ]);
+    }
 
-            // $post = Post::create([
-            //     'post_id' => $request->post_id,
-            //     'title' => $request->title,
-            //     'description' => $request->description,
-            //     'music' => $pathMusic,
-            //     'photos' => $filename,
-            // ]);
-        }
-    
-        return redirect()->route('posts.index')->with('success', 'Post created successfully');
+        return redirect()->route('posts.index')->with('success', 'Media created successfully.');
     }
 
     public function show(string $id)
@@ -81,41 +78,49 @@ class PostController extends Controller
 
     public function update(Request $request, string $id)
     {
-        // Temukan postingan berdasarkan ID
-    $post = Post::findOrFail($id);
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'music' => 'mimes:mp3,wav|max:10000',
+            'photos.*' => 'mimes:jpg,jpeg,png|max:10000',
+        ]);
 
-    // Validasi input
-    $validated = $request->validate([
-        'post_id' => 'required',
-        'title' => 'required',
-        'description' => 'nullable',
-        'music' => 'required|file|mimes:mp3,wav',
-        'photos.*' => 'required|image|mimes:jpeg,png,jpg,gif',
-    ]);
+        $post = Post::find($id);
 
-    // Update postingan
-    $post->update([
-        'post_id' => $validated['post_id'],
-        'title' => $validated['title'],
-        'description' => $validated['description'],
-        'photo_path' => $request->file('photos') ? $request->file('photos')->store('photos') : $post->photo_path,
-        'music' => $request->file('music') ? $request->file('music')->store('music') : $post->music,
-    ]);
-
-    if ($request->hasFile('photos')) {
-        foreach($request->file('photos') as $photo) {
-            $filename = time().'_'.$photo->getClientOriginalName();
-            $photo->storeAs('photos', $filename, 'public');
-            Photo::create([
-                'photo_path' => $filename,
-                'post_id' => $post->id,
-            ]);
+        if ($request->hasFile('music')) {
+            $audioPath = $request->file('music')->store('music', 'public');
+        }else {
+            $audioPath = $post->music;
         }
-    }
 
-    // Redirect ke halaman show dengan pesan sukses
-    return redirect()->route('posts.show', $post->id)->with('success', 'Post updated successfully');
-    }
+        if ($request->hasFile('photos')) {
+            foreach($request->file('photos') as $photo) {
+                $filename = time().'_'.$photo->getClientOriginalName();
+                $photo->storeAs('photos', $filename, 'public');
+                Photo::create([
+                    'photo_path' => $filename,
+                    'post_id' => $post->id,
+                ]);
+            }}else {
+                $filename = $post->photos;
+            }
+
+            // Menyimpan data pada tabel posts
+            $post = new Post();
+            $post->title = $request->title;
+            $post->description = $request->description;
+            $post->music = $audioPath;
+            $post->save(); // Simpan dulu data post
+
+            // Menyimpan data pada tabel photos (tabel relasi)
+            $photo = new Photo();
+            $photo->post_id = $post->id; // Menghubungkan ke post yang baru dibuat
+            $photo->photo_path = $filename; // Menyimpan path foto
+            $photo->save(); // Simpan data foto
+
+            return redirect()->route('posts.index')->with('success', 'Media updated successfully.');
+
+        }
 
     public function destroy(string $id)
     {
