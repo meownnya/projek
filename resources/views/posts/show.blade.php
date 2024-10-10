@@ -5,7 +5,7 @@
 @endif
 
 @foreach ($post->photos as $photo)
-    <img src="{{ asset('storage/' . $photo->photo_path) }}" alt="{{ $post->title }}">
+    <img src="{{ asset('storage/photos/' . $photo->photo_path) }}" alt="{{ $post->title }}">
 @endforeach
 <p>{{ \Carbon\Carbon::parse($post->from_date)->isoFormat('DD MMMM Y')}}</p>
 

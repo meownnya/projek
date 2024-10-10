@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Photo;
 use App\Models\Post;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::with('photos')->get(); // Mengambil semua postingan dengan relasi photos
-        return view('posts.index', compact('posts'));
+        $post = Post::with('photos')->get(); // Mengambil semua postingan dengan relasi photos
+        return view('posts.index', compact('post'));
 
     }
 
@@ -46,16 +46,13 @@ class PostController extends Controller
             foreach($request->file('photos') as $photo) {
                 $filename = time().'_'.$photo->getClientOriginalName();
                 $photo->storeAs('photos', $filename, 'public');
-                Photo::create([
-                    'photo_path' => $filename,
-                    'post_id' => $post->id,
-                ]);
+
             }
         Photo::create([
             'photo_path' => $filename,
             'post_id' => $post->id,
         ]);
-    }
+        }
 
         return redirect()->route('posts.index')->with('success', 'Media created successfully.');
     }
