@@ -1,11 +1,11 @@
 <h1>{{ $post->title }}</h1>
 <p>{{ $post->description }}</p>
 @if ($post->music)
-    <audio src="{{ asset('storage/' . $post->music) }}" type="audio/mpeg"></audio>
+    <audio src="/music/{{ $post->music }}/" type="audio/mpeg"></audio>
 @endif
 
 @foreach ($post->photos as $photo)
-    <img src="{{ asset('storage/photos/' . $photo->photo_path) }}" class="border p-2 m-3" style="width: 200px;" alt="{{ $post->title }}">
+    <img src="/photos/{{ $photo->photo_path }}"  class="border p-2 m-3" style="width: 200px;" alt="{{ $post->title }}">
 @endforeach
 <p>{{ \Carbon\Carbon::parse($post->from_date)->isoFormat('DD MMMM Y')}}</p>
 

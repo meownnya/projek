@@ -7,11 +7,9 @@
         @endif
 </div>
 
-@foreach ($post as $item)
-    <div>
-        <a href="{{ route('posts.show', $item->id) }}">
-            <img src="{{ asset('storage/photos/' .$item->photo_path) }}" alt="{{ $item->title }}">
+@foreach ($posts as $post)
+        <a href="{{ route('posts.show', $post->id) }}">
+            <img src="/photos/{{ $post->photos->first()->photo_path }}"  class="border p-2 m-3" style="width: 200px;" alt="{{ $post->title }}">
         </a>
-        <h2>{{ $item->title }}</h2>
-    </div>
+        <h2>{{ $post->title }}</h2>
 @endforeach
