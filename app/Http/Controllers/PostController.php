@@ -23,39 +23,6 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'title' => 'required',
-        //     'description' => 'required',
-        //     'music' => 'nullable|mimes:mp3,wav|max:10000',
-        //     'photos.*' => 'required|mimes:jpg,jpeg,png|max:10000',
-        // ]);
-
-    //     if ($request->hasFile('music')) {
-    //         $audioPath = $request->file('music')->store('music', 'public');
-    //     }else {
-    //         $audioPath = null;
-    //     }
-
-    //     $post = Post::create([
-    //         'title' => $request->title,
-    //         'description' => $request->description,
-    //         'music' => $audioPath,
-    //     ]);
-
-    //     if ($request->hasFile('photos')) {
-    //         foreach($request->file('photos') as $photo) {
-    //             $filename = time().'_'.$photo->getClientOriginalName();
-    //             $photo->storeAs('photos', $filename, 'public');
-
-    //         }
-    //     Photo::create([
-    //         'photo_path' => $filename,
-    //         'post_id' => $post->id,
-    //     ]);
-    //     }
-
-    //     return redirect()->route('posts.index')->with('success', 'Media created successfully.');
-    // }
 
         if($request->hasFile('music')){
             $file=$request->file('music');
@@ -106,46 +73,6 @@ class PostController extends Controller
 
     public function update(Request $request, string $id)
     {
-        // $request->validate([
-        //     'title' => 'required',
-        //     'description' => 'required',
-        //     'music' => 'mimes:mp3,wav|max:10000',
-        //     'photos.*' => 'mimes:jpg,jpeg,png|max:10000',
-        // ]);
-
-        // $post = Post::find($id);
-
-        // if ($request->hasFile('music')) {
-        //     $audioPath = $request->file('music')->store('music', 'public');
-        // }else {
-        //     $audioPath = $post->music;
-        // }
-
-        // if ($request->hasFile('photos')) {
-        //     foreach($request->file('photos') as $photo) {
-        //         $filename = time().'_'.$photo->getClientOriginalName();
-        //         $photo->storeAs('photos', $filename, 'public');
-        //         Photo::create([
-        //             'photo_path' => $filename,
-        //             'post_id' => $post->id,
-        //         ]);
-        //     }}else {
-        //         $filename = $post->photos;
-        //     }
-
-        //     // Menyimpan data pada tabel posts
-        //     $post = new Post();
-        //     $post->title = $request->title;
-        //     $post->description = $request->description;
-        //     $post->music = $audioPath;
-        //     $post->save(); // Simpan dulu data post
-
-        //     // Menyimpan data pada tabel photos (tabel relasi)
-        //     $photo = new Photo();
-        //     $photo->post_id = $post->id; // Menghubungkan ke post yang baru dibuat
-        //     $photo->photo_path = $filename; // Menyimpan path foto
-        //     $photo->save(); // Simpan data foto
-
         $post=Post::findOrFail($id);
         if($request->hasFile('music')){
             if (File::exists('music/'.$post->music)) {
@@ -155,7 +82,9 @@ class PostController extends Controller
             $post->music=time().'_'.$file->getClientOriginalName();
             $file->move(\public_path('music/'),$post->music);
             $request['music']=$post->music;
-        }
+        }else {
+            $post->music = null;
+                    }
    
            $post->update([
             'title' =>$request->title,
@@ -181,13 +110,40 @@ class PostController extends Controller
 
     public function destroy(string $id)
     {
-        // Temukan postingan berdasarkan ID
-        $post = Post::findOrFail($id);
+        $posts=Post::findOrFail($id);
 
-        // Hapus postingan
-        $post->delete();
-
-        // Redirect ke halaman index dengan pesan sukses
+         if (File::exists('music/'.$posts->music)) {
+             File::delete('music/'.$posts->music);
+         }
+         $photos=Photo::where('post_id',$posts->id)->get();
+         foreach($photos as $image){
+         if (File::exists('photos/'.$image->photo_path)) {
+            File::delete('photos/'.$image->photo_path);
+        }
+         }
+         $posts->delete();
         return redirect()->route('posts.index')->with('success', 'Post deleted successfully');
     }
+
+    public function deletemusic($id){
+        $music=Post::findOrFail($id)->music;
+        if (File::exists('music/'.$music)) {
+         File::delete('music/'.$music);
+    }
+
+    return back()->with('success', 'Music deleted successfully');
+    }
+
+
+    public function deletephoto($id){
+        $posts=Photo::findOrFail($id);
+        if (File::exists('photos/'.$posts->photo_path)) {
+           File::delete('Photos/'.$posts->photo_path);
+       }
+
+       Photo::find($id)->delete();
+       return back()->with('success', 'Photo deleted successfully');
+   }
+
+
 }

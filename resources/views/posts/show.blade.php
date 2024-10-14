@@ -1,7 +1,9 @@
 <h1>{{ $post->title }}</h1>
 <p>{{ $post->description }}</p>
 @if ($post->music)
-    <audio src="/music/{{ $post->music }}/" type="audio/mpeg"></audio>
+    <audio controls>
+    <source src="/music/{{ $post->music }}/" type="audio/mpeg"></source>
+    </audio>
 @endif
 
 @foreach ($post->photos as $photo)

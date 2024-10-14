@@ -8,3 +8,7 @@ Route::get('/', function () {
 });
 
 Route::resource('posts', PostController::class);
+Route::delete('/musics/{id}', [PostController::class, 'deletemusic'])->name('deletemusic');
+Route::delete('/posts/{id}', [PostController::class, 'deletephoto'])->name('deletephoto');
+
+Route::put('/update/{id}',[PostController::class,'update'])->name('posts.update');
