@@ -1,10 +1,18 @@
 <h1>{{ $post->title }}</h1>
 <p>{{ $post->description }}</p>
-@if ($post->music)
+{{-- @if ($post->music)
     <audio controls>
     <source src="/music/{{ $post->music }}/" type="audio/mpeg"></source>
     </audio>
+@endif --}}
+
+@if ($post->music)
+<audio controls>
+    <source src="{{ asset('music/' . $post->music) }}/" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
 @endif
+
 
 @foreach ($post->photos as $photo)
     <img src="/photos/{{ $photo->photo_path }}"  class="border p-2 m-3" style="width: 200px;" alt="{{ $post->title }}">

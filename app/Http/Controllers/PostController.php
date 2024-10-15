@@ -11,7 +11,8 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::with('photos')->get(); // Mengambil semua postingan dengan relasi photos
+        // $posts = Post::with('photos')->get(); // Mengambil semua postingan dengan relasi photos
+        $posts = Post::orderBy('created_at', 'desc')->get();
         return view('posts.index', compact('posts'));
 
     }
@@ -24,20 +25,20 @@ class PostController extends Controller
     public function store(Request $request)
     {
 
-        if($request->hasFile('music')){
-            $file=$request->file('music');
-            $audioPath=time().'_'.$file->getClientOriginalName();
-            $file->move(\public_path('music/'),$audioPath);
-        }else {
-        $audioPath = null;
-                }
+        // Simpan post ke database
+        $post = new Post();
+        $post->title = $request->input('title');
+        $post->description = $request->input('description');
 
-        $post =new Post([
-            'title' =>$request->title,
-            'description' =>$request->description,
-            'music' =>$audioPath,
-        ]);
-       $post->save();
+        // Cek jika ada file musik yang diupload
+        if ($request->hasFile('music')) {
+            $musicFile = $request->file('music');
+            $musicName = time() . '-' . $musicFile->getClientOriginalName();
+            $musicFile->move(public_path('music'), $musicName); // Simpan musik ke folder public/music
+            $post->music = $musicName; // Simpan nama file musik di database
+        }
+
+        $post->save();
 
         if($request->hasFile('photos')){
             $files=$request->file('photos');
@@ -78,13 +79,14 @@ class PostController extends Controller
             if (File::exists('music/'.$post->music)) {
                 File::delete('music/'.$post->music);
             }
-            $file=$request->file('music');
-            $post->music=time().'_'.$file->getClientOriginalName();
-            $file->move(\public_path('music/'),$post->music);
-            $request['music']=$post->music;
-        }else {
-            $post->music = null;
-                    }
+
+            $musicFile = $request->file('music');
+            $musicName = time() . '-' . $musicFile->getClientOriginalName();
+            $musicFile->move(public_path('music'), $musicName); // Simpan musik ke folder public/music
+            $post->music = $musicName; // Simpan nama file musik di database
+        }else{
+            $post->music=$post->music;
+        }
    
            $post->update([
             'title' =>$request->title,
