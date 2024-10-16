@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 </head>
 <body>
-    <div class="header">
+    {{-- <div class="header">
         <nav class="nav">
             <ul>
                 <li class="nav-link">
@@ -19,10 +19,11 @@
                 </li>
             </ul>
         </nav>
-    </div>
-        {{-- <h3 class="text-center text-danger"><a href="{{ route('posts.index') }}" class="btn btn-sm btn-primary mb-2">Memories</a>
+    </div> --}}
+        <h3 class="text-center text-danger">
+            <a href="{{ route('posts.index') }}" class="btn btn-sm btn-primary mb-2">Memories</a>
             <a href="{{ route('posts.create') }}" class="btn btn-sm btn-primary mb-2">Add</a>
-        </h3> --}}
+        </h3>
     
             @if (session('success'))
             <div>{{ session('success') }}</div>
