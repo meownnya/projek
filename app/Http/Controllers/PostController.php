@@ -106,7 +106,7 @@ class PostController extends Controller
         }
         
 
-            return redirect()->route('posts.index')->with('success', 'Media updated successfully.');
+            return back()->with('success', 'Media updated successfully.');
 
         }
 
@@ -127,15 +127,18 @@ class PostController extends Controller
         return redirect()->route('posts.index')->with('success', 'Post deleted successfully');
     }
 
-    // public function deletemusic($id){
-    //     $music=Post::findOrFail($id)->music;
-    //     if (File::exists('music/'.$music)) {
-    //      File::delete('music/'.$music);
-    // }
+    public function deletemusic($id){
 
-    // return back()->with('success', 'Music deleted successfully');
-    // }
+        $post=Post::findOrFail($id);
+        if (File::exists('music/'.$post->music)) {
+            File::delete('music/'.$post->music);
+        }
+        $post->update([
+            'music' =>null,
 
+        ]);
+        return back()->with('success', 'Music deleted successfully');
+    }
 
     public function deletephoto($id){
     
@@ -147,7 +150,7 @@ class PostController extends Controller
 
     // Jika foto hanya tersisa 1, beri peringatan dan jangan hapus foto
     if ($photoCount <= 1) {
-        return back()->with('error', 'Minimal satu foto harus tersisa. Anda tidak dapat menghapus semua foto.');
+        return back()->with('error', 'You cannot delete all photos.');
     }
 
     // Jika lebih dari 1 foto, lanjutkan proses penghapusan
