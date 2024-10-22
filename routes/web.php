@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\FolderController;
+use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,3 +15,5 @@ Route::delete('/deletemusic/{id}', [PostController::class, 'deleteMusic'])->name
 Route::post('/addmusic/{id}',[PostController::class,'addmusic'])->name('addmusic');
 Route::post('/addphotos/{id}',[PostController::class,'addphotos'])->name('addphotos');
 Route::put('/update/{id}',[PostController::class,'update'])->name('posts.update');
+
+Route::resource('folders', FolderController::class);

@@ -1,3 +1,11 @@
+@extends('layouts.app')
+
+@section('content')
+
+    <h3 class="text-center text-danger">
+        <a href="{{ route('posts.create') }}" class="btn btn-sm btn-primary mb-2">Create Post</a>
+    </h3>
+
 <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="form-group">
@@ -24,3 +32,5 @@
 </form>
 
 <a href="{{ route('posts.index') }}" class="btn btn-secondary mt-3">Back</a>
+
+@endsection

@@ -1,3 +1,7 @@
+@extends('layouts.app')
+
+@section('content')
+
 <h1>{{ $post->title }}</h1>
 <p>{{ $post->description }}</p>
 
@@ -25,3 +29,4 @@
         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
     </form>
 </div>
+@endsection

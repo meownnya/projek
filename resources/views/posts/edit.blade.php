@@ -1,3 +1,7 @@
+@extends('layouts.app')
+
+@section('content')
+
 <div class="col-lg-6">
     <h3 class="text-center text-danger"><b>Edit Photos</b></h3>
     
@@ -73,3 +77,5 @@
         <a href="{{ route('posts.show', $post->id) }}" class="btn btn-link mt-3">Back</a>
     </div>
 </div>
+
+@endsection

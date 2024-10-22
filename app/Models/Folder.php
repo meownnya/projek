@@ -5,24 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Folder extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'title',
         'description',
-        'music',
     ];
 
-    public function photos()
+    public function posts()
     {
-        return $this->hasMany(Photo::class);
-    }
-
-
-    public function folders()
-    {
-        return $this->belongsToMany(Folder::class, 'folder_post');
+        return $this->belongsToMany(Post::class, 'folder_post');
     }
 }
