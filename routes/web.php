@@ -3,6 +3,7 @@
 use App\Http\Controllers\FolderController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,3 +18,4 @@ Route::post('/addphotos/{id}',[PostController::class,'addphotos'])->name('addpho
 Route::put('/update/{id}',[PostController::class,'update'])->name('posts.update');
 
 Route::resource('folders', FolderController::class);
+Route::get('/search', [SearchController::class, 'search'])->name('search');

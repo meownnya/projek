@@ -11,18 +11,10 @@ class PostController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->input('search');
+        $posts = Post::orderBy('created_at', 'desc')->get();
+        session()->put('previous_url', url()->previous());
 
-        if ($search) {
-            $posts = Post::where('title', 'like', '%' . $search . '%')
-                ->orWhere('description', 'like', '%' . $search . '%')
-                ->orderBy('created_at', 'desc')
-                ->get();
-        } else {
-            $posts = Post::orderBy('created_at', 'desc')->get();
-        }
-
-        return view('posts.index', compact('posts', 'search'));
+        return view('posts.index', compact('posts'));
     }
 
     public function create()
@@ -33,11 +25,11 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255', 
-            'description' => 'nullable|string', 
-            'music' => 'nullable|mimes:mp3,wav,mpeg|max:10000', 
-            'photos' => 'required', 
-            'photos.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'music' => 'nullable|mimes:mp3,wav,mpeg|max:10000',
+            'photos' => 'required',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $post = new Post();
@@ -47,19 +39,19 @@ class PostController extends Controller
         if ($request->hasFile('music')) {
             $musicName = time() . '-' . $request->music->getClientOriginalName();
             Storage::putFileAs('uploads/music', $request->music, $musicName);
-            $post->music = $musicName; 
+            $post->music = $musicName;
         }
 
         $post->save();
 
         if ($request->hasFile('photos')) {
-            $files = $request->file('photos');
-            foreach ($files as $file) {
+            foreach ($request->file('photos') as $file) {
                 $filename = time() . '_' . $file->getClientOriginalName();
                 Storage::putFileAs('uploads/photos', $file, $filename);
+
                 Photo::create([
                     'post_id' => $post->id,
-                    'photo_path' => $filename, 
+                    'photo_path' => $filename,
                 ]);
             }
         }
@@ -70,12 +62,14 @@ class PostController extends Controller
     public function show(string $id)
     {
         $post = Post::with('photos')->findOrFail($id);
+        session()->put('previous_url', url()->previous());
+
         return view('posts.show', compact('post'));
     }
 
     public function edit(string $id)
     {
-        $post = Post::find($id);
+        $post = Post::findOrFail($id);
         return view('posts.edit', compact('post'));
     }
 
@@ -107,10 +101,10 @@ class PostController extends Controller
         ]);
 
         if ($request->hasFile('photos')) {
-            $files = $request->file('photos');
-            foreach ($files as $file) {
+            foreach ($request->file('photos') as $file) {
                 $filename = time() . '_' . $file->getClientOriginalName();
                 Storage::putFileAs('uploads/photos', $file, $filename);
+
                 Photo::create([
                     'post_id' => $post->id,
                     'photo_path' => $filename,
@@ -118,7 +112,10 @@ class PostController extends Controller
             }
         }
 
-        return back()->with('success', 'Media updated successfully.');
+        $previousUrl = session()->get('previous_url', route('posts.index'));
+        session()->forget('previous_url');
+
+        return redirect($previousUrl)->with('success', 'Post updated successfully.');
     }
 
     public function destroy(string $id)
@@ -129,14 +126,14 @@ class PostController extends Controller
             Storage::delete('uploads/music/' . $post->music);
         }
 
-        $photos = Photo::where('post_id', $post->id)->get();
-        foreach ($photos as $photo) {
+        foreach (Photo::where('post_id', $post->id)->get() as $photo) {
             if (Storage::exists('uploads/photos/' . $photo->photo_path)) {
                 Storage::delete('uploads/photos/' . $photo->photo_path);
             }
         }
 
         $post->delete();
+
         return redirect()->route('posts.index')->with('success', 'Post deleted successfully.');
     }
 
@@ -157,8 +154,7 @@ class PostController extends Controller
     {
         $photo = Photo::findOrFail($id);
 
-        $photoCount = Photo::where('post_id', $photo->post_id)->count();
-        if ($photoCount <= 1) {
+        if (Photo::where('post_id', $photo->post_id)->count() <= 1) {
             return back()->with('error', 'You cannot delete all photos.');
         }
 
@@ -201,8 +197,7 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
 
         if ($request->hasFile('photos')) {
-            $files = $request->file('photos');
-            foreach ($files as $file) {
+            foreach ($request->file('photos') as $file) {
                 $filename = time() . '_' . $file->getClientOriginalName();
                 Storage::putFileAs('uploads/photos', $file, $filename);
 

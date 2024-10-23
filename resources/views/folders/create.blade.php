@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<a href="{{ url()->previous() }}" class="btn btn-secondary">Back</a>
+
 
     <form action="{{ route('folders.store') }}" method="POST">
         @csrf
@@ -27,6 +29,5 @@
         </div>
 
         <button type="submit" class="btn btn-sm btn-success">Create Folder</button>
-        <a href="{{ route('folders.index') }}" class="btn btn-sm btn-danger">Cancel</a>
     </form>
 @endsection

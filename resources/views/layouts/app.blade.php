@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Memories</title>
 
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
@@ -26,10 +28,12 @@
 
                 <li class="search">
                     <a>
-                        <form action="{{ route('posts.index') }}" method="GET" class="mb-4">
-                        <input type="text" name="search" placeholder="" value="{{ $search ?? '' }}">
+                       <!-- Form Pencarian -->
+                    <form action="{{ route('search') }}" method="GET" class="mb-4">
+                        <input type="text" name="query" placeholder="Search..." value="{{ request('query') }}">
                         <button type="submit" class="btn btn-sm btn-primary">Search</button>
                     </form>
+
                 </a>
                     
                 </li>
@@ -39,8 +43,8 @@
                       Create
                     </a>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Memories</a></li>
-                      <li><a class="dropdown-item" href="#">Folders</a></li>
+                      <li><a class="dropdown-item" href="{{ route('posts.create') }}">Memories</a></li>
+                      <li><a class="dropdown-item" href="{{ route('folders.create') }}">Folders</a></li>
                     </ul>
                   </li>
 

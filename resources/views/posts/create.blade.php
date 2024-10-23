@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<a href="{{ url()->previous() }}" class="btn btn-secondary">Back</a>
+
 
     <h3 class="text-center text-danger">
         <a href="{{ route('posts.create') }}" class="btn btn-sm btn-primary mb-2">Create Post</a>
@@ -30,7 +32,5 @@
 
     <button type="submit" class="btn btn-primary">Create</button>
 </form>
-
-<a href="{{ route('posts.index') }}" class="btn btn-secondary mt-3">Back</a>
 
 @endsection

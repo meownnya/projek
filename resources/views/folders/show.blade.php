@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $folder->title }} - Folder Details</title>
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-</head>
-<body>
+@extends('layouts.app')
 
+@section('content')
+<a href="{{ route('folders.index')}}">Back</a>
     <h1>{{ $folder->title }}</h1>
 
     <!-- Deskripsi Folder -->
@@ -26,6 +19,7 @@
                 <div class="post-item">
                     <a href="#">
                         @if ($post->photos->first())
+                        <a href="{{ route('posts.show', $post->id) }}">
                             <img src="{{ asset('/storage/uploads/photos/' . $post->photos->first()->photo_path) }}" 
                                  alt="{{ $post->title }}"
                                  style="width: 150px;">
@@ -41,7 +35,4 @@
         <p>No posts in this folder.</p>
     @endif
 
-    <a href="{{ route('folders.index') }}" class="btn btn-primary">Back to Folders</a>
-
-</body>
-</html>
+@endsection

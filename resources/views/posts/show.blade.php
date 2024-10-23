@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<a href="{{ url()->previous() }}" class="btn btn-secondary">Back</a>
+
 
 <h1>{{ $post->title }}</h1>
 <p>{{ $post->description }}</p>
@@ -21,7 +23,6 @@
 
 <div class="actions">
     <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-sm btn-primary">Edit</a>
-    <a href="{{ route('posts.index') }}" class="btn btn-sm btn-secondary">Back</a>
 
     <form action="{{ route('posts.destroy', $post->id) }}" method="POST" style="display:inline;">
         @csrf

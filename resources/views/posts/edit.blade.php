@@ -4,6 +4,8 @@
 
 <div class="col-lg-6">
     <h3 class="text-center text-danger"><b>Edit Photos</b></h3>
+    <a href="{{ session()->get('previous_url', url()->previous()) }}" class="btn btn-sm btn-secondary">Back</a>
+
     
     <div class="form-group">        
         @if (session('error'))
@@ -74,7 +76,6 @@
             <button type="submit" class="btn btn-danger mt-3">Edit</button>
         </form>
 
-        <a href="{{ route('posts.show', $post->id) }}" class="btn btn-link mt-3">Back</a>
     </div>
 </div>
 
