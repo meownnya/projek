@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Folder;
 use App\Models\Post;
+use App\Models\Photo;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 class FolderController extends Controller
@@ -50,6 +52,14 @@ class FolderController extends Controller
         // Kirim data folder ke view
         return view('folders.show', compact('folder'));
     }
-    
 
+    public function destroy($id)
+    {
+        $folder = Folder::findOrFail($id);
+        $folder->posts()->detach();
+        $folder->delete();
+        return redirect()->route('folders.index')->with('success', 'Folder successfully deleted.');
+
+
+    }
 }

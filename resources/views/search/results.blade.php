@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.navbar')
 
 @section('content')
     <h1>Search Results for "{{ $query }}"</h1>
@@ -9,11 +9,8 @@
         @foreach ($folders as $folder)
             <a href="{{ route('folders.show', ['folder' => $folder->id]) }}">
                 <img src="{{ asset('/storage/uploads/photos/' . $folder->posts->first()->photos->first()->photo_path) }}" 
-                     class="border p-2 m-3" 
-                     style="width: 200px;" 
                      alt="{{ $folder->title }}">
                 <h3>{{ $folder->title }}</h3>
-                <span class="badge">{{ $folder->posts->count() }} posts</span>
             </a>
         @endforeach
     @else
@@ -26,8 +23,6 @@
         @foreach ($posts as $post)
             <a href="{{ route('posts.show', ['post' => $post->id]) }}">
                 <img src="{{ asset('/storage/uploads/photos/' . $post->photos->first()->photo_path) }}" 
-                     class="border p-2 m-3" 
-                     style="width: 200px;" 
                      alt="{{ $post->title }}">
                 <h3>{{ $post->title }}</h3>
             </a>

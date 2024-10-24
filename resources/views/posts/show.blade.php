@@ -1,8 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.navbar')
 
 @section('content')
-<a href="{{ url()->previous() }}" class="btn btn-secondary">Back</a>
-
+<a href="{{ url()->previous() }}">Back</a>
 
 <h1>{{ $post->title }}</h1>
 <p>{{ $post->description }}</p>
@@ -13,21 +12,21 @@
     </audio>
 @endif
 
-<div class="photo-gallery">
+<div>
     @foreach ($post->photos as $photo)
-        <img src="{{ asset('storage/uploads/photos/' . $photo->photo_path) }}" class="border p-2 m-3" style="width: 200px;" alt="{{ $post->title }}">
+        <img src="{{ asset('storage/uploads/photos/' . $photo->photo_path) }}" alt="{{ $post->title }}">
     @endforeach
 </div>
 
 <p>{{ \Carbon\Carbon::parse($post->from_date)->isoFormat('DD MMMM Y') }}</p>
 
-<div class="actions">
-    <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-sm btn-primary">Edit</a>
+<div>
+    <a href="{{ route('posts.edit', $post->id) }}">Edit</a>
 
     <form action="{{ route('posts.destroy', $post->id) }}" method="POST" style="display:inline;">
         @csrf
         @method('DELETE')
-        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+        <button type="submit">Delete</button>
     </form>
 </div>
 @endsection

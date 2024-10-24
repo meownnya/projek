@@ -1,36 +1,34 @@
-@extends('layouts.app')
+@extends('layouts.navbar')
 
 @section('content')
-<a href="{{ url()->previous() }}" class="btn btn-secondary">Back</a>
 
-
-    <h3 class="text-center text-danger">
-        <a href="{{ route('posts.create') }}" class="btn btn-sm btn-primary mb-2">Create Post</a>
-    </h3>
+<h3>
+    <a href="{{ route('posts.create') }}">Create Post</a>
+</h3>
 
 <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
-    <div class="form-group">
+    <div>
         <label for="title">Title:</label>
-        <input type="text" name="title" id="title" class="form-control" required>
+        <input type="text" name="title" id="title" required>
     </div>
     
-    <div class="form-group">
+    <div>
         <label for="description">Description:</label>
-        <textarea name="description" id="description" class="form-control"></textarea>
+        <textarea name="description" id="description"></textarea>
     </div>
 
-    <div class="form-group">
+    <div>
         <label for="music">Music:</label>
-        <input type="file" name="music" id="music" class="form-control-file" accept="audio/*">
+        <input type="file" name="music" id="music" accept="audio/*">
     </div>
 
-    <div class="form-group">
+    <div>
         <label for="photos">Photos:</label>
-        <input type="file" name="photos[]" id="photos" class="form-control-file" multiple accept="image/*" required>
+        <input type="file" name="photos[]" id="photos" multiple accept="image/*" required>
     </div>
 
-    <button type="submit" class="btn btn-primary">Create</button>
+    <button type="submit">Create</button>
 </form>
 
 @endsection

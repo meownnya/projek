@@ -1,0 +1,181 @@
+/* Warna dasar untuk tema soft blue dengan dominasi putih */
+:root {
+    --background-color: #ffffff; /* Putih untuk background */
+    --primary-text-color: #87cefa; /* Biru langit lembut */
+    --secondary-text-color: #b0e0e6; /* Biru lebih lembut */
+    --accent-color: #add8e6; /* Biru pastel sebagai aksen */
+    --button-bg-color: #f0f8ff; /* Background button (biru sangat pucat) */
+    --input-bg-color: #ffffff; /* Background input (putih) */
+    --border-color: #add8e6; /* Border biru pastel */
+    --hover-color: #b0e0e6; /* Warna saat hover */
+}
+
+/* Mengatur tampilan body */
+body {
+    background-color: var(--background-color);
+    color: var(--primary-text-color);
+    font-family: "Poppins", sans-serif; /* Mengganti font menjadi Poppins */
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar tetap di atas */
+.menu {
+    position: fixed; /* Membuat navbar tetap di atas */
+    top: 0; /* Menempelkan navbar di bagian atas halaman */
+    left: 0;
+    width: 100%; /* Lebar navbar sesuai layar */
+    z-index: 1000; /* Memastikan navbar berada di atas elemen lain */
+    background-color: var(--background-color);
+    padding: 10px; /* Padding untuk navbar */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Efek bayangan untuk navbar */
+}
+
+/* Atur jarak isi halaman dari atas agar tidak tertutup oleh navbar */
+body {
+    margin-top: 60px; /* Jarak antara konten dan navbar */
+}
+
+.menu > ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.menu > ol > li:first-child a {
+    border-bottom: 2px solid var(--primary-text-color); /* Garis pemisah di bawah "MEMORIES" */
+    padding-bottom: 8px; /* Menambahkan padding bawah agar garis tidak terlalu dekat dengan teks */
+    margin-bottom: 5px; /* Jarak antara garis dan elemen lainnya */
+}
+
+.menu > ol > li {
+    position: relative;
+}
+
+/* Ukuran tulisan lebih besar untuk menu */
+.menu a {
+    color: var(--primary-text-color);
+    text-decoration: none;
+    padding: 10px 10px; /* Mengurangi padding untuk mendekatkan elemen */
+    font-size: 16px; /* Meningkatkan ukuran tulisan */
+    border-radius: 20px; /* Radius sudut untuk menu utama */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin-right: 2px; /* Jarak antar menu utama lebih dekat */
+}
+
+/* Efek hover pada teks */
+.menu a:hover {
+    background-color: var(--hover-color);
+    color: var(--background-color);
+}
+
+/* Tombol yang aktif */
+.menu a.active,
+.menu a.selected {
+    background-color: var(--primary-text-color);
+    color: var(--background-color);
+}
+
+/* Memperpanjang input pencarian */
+.menu form input[type="text"] {
+    padding: 8px 12px;
+    font-size: 16px; /* Meningkatkan ukuran teks input */
+    width: 500px; /* Memperpanjang lebar input pencarian */
+    border: 1px solid var(--primary-text-color); /* Pinggirannya biru */
+    border-radius: 20px;
+    background-color: var(--input-bg-color); /* Background putih */
+    color: var(--primary-text-color); /* Teks di dalamnya biru */
+    transition: width 0.3s ease;
+}
+
+.menu form input[type="text"]::placeholder {
+    color: var(--primary-text-color); /* Placeholder berwarna biru */
+}
+
+/* Perpanjang lebar saat fokus */
+.menu form input[type="text"]:focus {
+    outline: none;
+    width: 600px; /* Lebar input lebih panjang saat difokuskan */
+}
+
+/* Style untuk tombol pencarian */
+.menu form button {
+    padding: 8px 15px;
+    font-size: 14px;
+    margin-left: 5px;
+    background-color: var(--button-bg-color);
+    color: var(--primary-text-color);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.menu form button:hover {
+    background-color: var(--hover-color);
+    color: var(--background-color);
+}
+
+.menu form {
+    display: inline-block;
+}
+
+.menu input[type="text"]:focus {
+    background-color: var(--hover-color);
+}
+
+/* Dropdown (sub-menu) */
+.sub-menu {
+    background-color: var(--background-color);
+    border-radius: 5px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: none;
+    list-style: none;
+    padding: 10px;
+}
+
+/* Tampilkan sub-menu saat hover */
+.menu > ol > li:hover .sub-menu {
+    display: block;
+}
+
+/* Pengaturan sub-menu */
+.sub-menu a {
+    display: block;
+    padding: 8px 15px;
+    color: var(--secondary-text-color); /* Warna default sub-menu */
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    margin-bottom: 2px; /* Jarak antar sub-menu lebih dekat */
+    border-radius: 20px; /* Radius sudut untuk sub-menu */
+}
+
+/* Efek hover pada sub-menu */
+.sub-menu a:hover {
+    background-color: var(--hover-color);
+    color: #ffffff; /* Mengubah warna teks menjadi putih saat hover */
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+    .menu > ol {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .menu a {
+        display: block;
+        margin: 2px 0; /* Jarak antar menu utama lebih dekat */
+    }
+}
+
+.icon {
+    margin-right: 8px; /* Jarak antara ikon dan tulisan */
+    font-size: 16px; /* Ukuran ikon */
+    vertical-align: middle; /* Menyelaraskan ikon dengan teks */
+}

@@ -1,21 +1,20 @@
-@extends('layouts.app')
+@extends('layouts.navbar')
 
 @section('content')
 
-<div class="col-lg-6">
-    <h3 class="text-center text-danger"><b>Edit Photos</b></h3>
-    <a href="{{ session()->get('previous_url', url()->previous()) }}" class="btn btn-sm btn-secondary">Back</a>
+<div>
+    <h3>Edit Photos</h3>
+    <a href="{{ session()->get('previous_url', url()->previous()) }}">Back</a>
 
-    
-    <div class="form-group">        
+    <div>
         @if (session('error'))
-            <div class="alert alert-danger">
+            <div>
                 {{ session('error') }}
             </div>
         @endif
 
         @if (session('success'))
-            <div class="alert alert-success">
+            <div>
                 {{ session('success') }}
             </div>
         @endif
@@ -25,7 +24,7 @@
             <form action="/deletemusic/{{ $post->id }}" method="post">
                 @csrf
                 @method('delete')
-                <button class="btn text-danger">X</button>
+                <button>X</button>
             </form>
             <audio controls>
                 <source src="{{ asset('storage/uploads/music/' . $post->music) }}" type="audio/mpeg">
@@ -33,11 +32,11 @@
         @else
             <form action="/addmusic/{{ $post->id }}" method="post" enctype="multipart/form-data">
                 @csrf
-                <div class="form-group">
+                <div>
                     <label for="music">Music:</label>
                     <input type="file" name="music" id="music" accept="audio/*">
                 </div>
-                <button type="submit" class="btn btn-primary">Add Music</button>
+                <button type="submit">Add Music</button>
             </form>
         @endif
 
@@ -47,33 +46,33 @@
                 <form action="/deletephoto/{{ $photo->id }}" method="post" style="display: inline-block;">
                     @csrf
                     @method('delete')
-                    <button class="btn text-danger">X</button>
+                    <button>X</button>
                 </form>
-                <img src="{{ asset('storage/uploads/photos/' . $photo->photo_path) }}" class="img-responsive" style="max-height: 100px; max-width: 100px;" alt="Photo">
+                <img src="{{ asset('storage/uploads/photos/' . $photo->photo_path) }}" alt="Photo">
             @endforeach
 
-            <form action="/addphotos/{{ $post->id }}" method="POST" enctype="multipart/form-data" class="mt-2">
+            <form action="/addphotos/{{ $post->id }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="form-group">
+                <div>
                     <label for="photos">Add Photos:</label>
                     <input type="file" name="photos[]" multiple>
                 </div>
-                <button type="submit" class="btn btn-primary">Add Photos</button>
+                <button type="submit">Add Photos</button>
             </form>
         @endif
 
-        <form action="{{ route('posts.update', $post->id) }}" method="POST" enctype="multipart/form-data" class="mt-3">
+        <form action="{{ route('posts.update', $post->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-            <div class="form-group">
+            <div>
                 <label for="title">Title:</label>
-                <input type="text" name="title" id="title" value="{{ $post->title }}" class="form-control" required>
+                <input type="text" name="title" id="title" value="{{ $post->title }}" required>
             </div>
-            <div class="form-group">
+            <div>
                 <label for="description">Description:</label>
-                <textarea name="description" id="description" class="form-control">{{ old('description', $post->description) }}</textarea>
+                <textarea name="description" id="description">{{ old('description', $post->description) }}</textarea>
             </div>
-            <button type="submit" class="btn btn-danger mt-3">Edit</button>
+            <button type="submit">Edit</button>
         </form>
 
     </div>
