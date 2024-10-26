@@ -30,10 +30,5 @@
     <p>No posts in this folder.</p>
 @endif
 
-<form action="{{ route('folders.destroy', $folder->id) }}" method="POST" style="margin-top: 20px;">
-    @csrf
-    @method('DELETE')
-    <button type="submit" class="btn btn-danger">Delete Folder</button>
-</form>
 
 @endsection

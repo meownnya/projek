@@ -56,7 +56,7 @@ class PostController extends Controller
             }
         }
 
-        return redirect()->route('posts.index')->with('success', 'New post added.');
+        return redirect()->route('posts.index')->with('success', 'New memories added.');
     }
 
     public function show(string $id)

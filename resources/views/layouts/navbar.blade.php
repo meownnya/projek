@@ -7,17 +7,25 @@
     <title>Memories</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/show.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
+
 </head>
 <body>
     <div class="menu">
+        <div class="hamburger" id="hamburger">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
         <ol>
             <li>
                 <a href="{{ route('posts.index')}}" class="{{ request()->is('/') ? 'active' : '' }}">
                     <i class="bi bi-camera icon"></i> MEMORIES
                 </a>
             </li>
-            
             <li>
                 <a href="{{ route('posts.index') }}" class="{{ request()->is('posts') ? 'active' : '' }}">Home</a>
             </li>
@@ -26,15 +34,16 @@
             </li>
             <li>
                 <form action="{{ route('search') }}" method="GET">
+                    <i class="bi bi-search icon"></i>
                     <input type="text" name="query" placeholder="Search..." value="{{ request('query') }}">
                     <button type="submit">Search</button>
                 </form>
             </li>
-            <li>
-                <a href="#" role="button" aria-expanded="false" class="{{ request()->is('create') ? 'active' : '' }}">
+            <li class="dropdown">
+                <a href="#" class="{{ request()->is('create') ? 'active' : '' }}" id="create-toggle">
                     <i class="bi bi-plus icon"></i> Create
-                </a>                
-                <ul class="sub-menu">
+                </a>
+                <ul class="sub-menu" id="create-menu">
                     <li><a href="{{ route('posts.create') }}">Memories</a></li>
                     <li><a href="{{ route('folders.create') }}">Folders</a></li>
                 </ul>
@@ -45,7 +54,12 @@
         </ol>
     </div>
     
-
     @yield('content')
+
+    <script>
+        document.getElementById('hamburger').addEventListener('click', function() {
+            document.querySelector('.menu').classList.toggle('active');
+        });
+    </script>
 </body>
 </html>

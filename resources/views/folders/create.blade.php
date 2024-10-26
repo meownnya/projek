@@ -10,7 +10,6 @@
     <label for="folder-description">Description:</label>
     <textarea name="description" id="folder-description"></textarea><br>
 
-    <!-- Tampilkan semua postingan dengan checkbox untuk memilih -->
     @foreach ($posts as $post)
         <div>
             <label>

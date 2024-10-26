@@ -4,13 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Folder;
 use App\Models\Post;
-use App\Models\Photo;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 class FolderController extends Controller
 {
-
     public function index()
     {
         // Mengambil folder beserta postingan dan foto terkait
@@ -46,20 +43,15 @@ class FolderController extends Controller
 
     public function show(Folder $folder)
     {
-        // Pastikan folder beserta relasinya dipanggil
-        $folder = Folder::with('posts.photos')->findOrFail($folder->id);
-    
-        // Kirim data folder ke view
+        // Sudah mendapatkan folder dengan relasinya
         return view('folders.show', compact('folder'));
     }
 
-    public function destroy($id)
+    public function destroy(Folder $folder)
     {
-        $folder = Folder::findOrFail($id);
         $folder->posts()->detach();
         $folder->delete();
         return redirect()->route('folders.index')->with('success', 'Folder successfully deleted.');
-
-
     }
 }
+
