@@ -1,7 +1,10 @@
 @extends('layouts.navbar')
 
 @section('content')
-<a href="{{ route('folders.index')}}">Back</a>
+<a href="{{ route('folders.index')}}" class="back-button">
+    <i class="bi bi-arrow-left"></i>
+</a>
+
 <h1>{{ $folder->title }}</h1>
 
 @if ($folder->description)

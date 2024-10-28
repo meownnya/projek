@@ -2,6 +2,10 @@
 
 @section('content')
 
+<h3>
+    <a href="{{ route('folders.create') }}">Create Folders</a>
+</h3>
+
 <form action="{{ route('folders.store') }}" method="POST">
     @csrf
     <label for="folder-title">Folder Title:</label>

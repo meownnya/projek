@@ -62,7 +62,6 @@ class PostController extends Controller
     public function show(string $id)
     {
         $post = Post::with('photos')->findOrFail($id);
-        session()->put('previous_url', url()->previous());
 
         return view('posts.show', compact('post'));
     }
@@ -112,10 +111,7 @@ class PostController extends Controller
             }
         }
 
-        $previousUrl = session()->get('previous_url', route('posts.index'));
-        session()->forget('previous_url');
-
-        return redirect($previousUrl)->with('success', 'Post updated successfully.');
+        return back()->with('success', 'Post updated successfully.');
     }
 
     public function destroy(string $id)

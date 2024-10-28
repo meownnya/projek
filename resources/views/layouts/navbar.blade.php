@@ -8,9 +8,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/show.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/detail.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/navig.css') }}">
 
 </head>
 <body>
@@ -23,11 +24,11 @@
         <ol>
             <li>
                 <a href="{{ route('posts.index')}}" class="{{ request()->is('/') ? 'active' : '' }}">
-                    <i class="bi bi-camera icon"></i> MEMORIES
+                    <i class="bi bi-box2-heart-fill"></i>
                 </a>
             </li>
             <li>
-                <a href="{{ route('posts.index') }}" class="{{ request()->is('posts') ? 'active' : '' }}">Home</a>
+                <a href="{{ route('posts.index') }}" class="{{ request()->is('posts') ? 'active' : '' }}">Memories</a>
             </li>
             <li>
                 <a href="{{ route('folders.index') }}" class="{{ request()->is('folders') ? 'active' : '' }}">Folders</a>

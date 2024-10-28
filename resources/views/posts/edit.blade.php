@@ -4,7 +4,6 @@
 
 <div>
     <h3>Edit Photos</h3>
-    <a href="{{ session()->get('previous_url', url()->previous()) }}">Back</a>
 
     <div>
         @if (session('error'))
