@@ -1,12 +1,12 @@
-@extends('layouts.navbar')
+@extends('layouts.navbar') 
 
 @section('content')
 
 <div class="post-card">
-    <!-- Left Section: Slider and Audio Controls -->
+
     <div class="left-section">
         <div class="slider-container">
-            <div class="slider-track">
+            <div class="slider-track" id="sliderTrack">
                 @foreach ($post->photos as $photo)
                     <div class="slider-item">
                         <img src="{{ asset('storage/uploads/photos/' . $photo->photo_path) }}" alt="{{ $post->title }}">
@@ -22,28 +22,25 @@
             @endif
         </div>
 
-        <!-- Audio Controls and Date below the Image -->
         <div class="media-info">
             <div class="custom-audio">
-                <button onclick="playAudio()"><i class="bi bi-play-fill"></i></button>
-                <button onclick="pauseAudio()"><i class="bi bi-pause-fill"></i></button>
-                <button onclick="stopAudio()"><i class="bi bi-stop-fill"></i></button>
+                <button onclick="toggleAudio()" id="audioButton" class="{{ $post->music ? '' : 'dimmed' }}">
+                    <i class="bi bi-play-fill"></i>
+                </button>
             </div>
             <p class="date">{{ \Carbon\Carbon::parse($post->from_date)->isoFormat('DD MMMM Y') }}</p>
         </div>
         <audio id="audioPlayer" src="{{ $post->music ? asset('storage/uploads/music/' . $post->music) : '#' }}"></audio>
     </div>
 
-    <!-- Right Section: Title and Description -->
     <div class="right-section">
         <div class="card-content">
-            <h1 class="post-titles">{{ $post->title }}</h1>
+            <h1 class="post-title">{{ $post->title }}</h1>
             <hr class="divider">
             <p class="post-description">{{ $post->description ?: 'No description' }}</p>
         </div>
     </div>
 
-    <!-- Action Buttons at the Top Left -->
     <div class="action-buttons">
         <a href="{{ route('posts.edit', $post->id) }}">
             <button class="edit-button"><i class="bi bi-pencil"></i></button>
@@ -58,5 +55,33 @@
     </div>
 </div>
 
+<script>
+    let currentIndex = 0;
+    const sliderTrack = document.getElementById('sliderTrack');
+    const items = document.querySelectorAll('.slider-item');
+
+    function moveSlide(direction) {
+        currentIndex += direction;
+        if (currentIndex < 0) currentIndex = items.length - 1;
+        if (currentIndex >= items.length) currentIndex = 0;
+        sliderTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+
+    const audioPlayer = document.getElementById('audioPlayer');
+    const audioButton = document.getElementById('audioButton');
+    let isPlaying = false;
+
+    function toggleAudio() {
+        if (!audioPlayer.src || audioPlayer.src === window.location.href + "#") return;
+        if (isPlaying) {
+            audioPlayer.pause();
+            audioButton.innerHTML = '<i class="bi bi-play-fill"></i>';
+        } else {
+            audioPlayer.play();
+            audioButton.innerHTML = '<i class="bi bi-pause-fill"></i>';
+        }
+        isPlaying = !isPlaying;
+    }
+</script>
 
 @endsection

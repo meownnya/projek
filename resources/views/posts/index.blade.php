@@ -6,23 +6,6 @@
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 
-<script>
-
-    const alert = document.querySelector('.alert');
-
-    if (alert) {
-        
-        setTimeout(() => {
-            alert.classList.add('fade-out');
-            
-            setTimeout(() => {
-                alert.remove();
-            }, 500); 
-        }, 3000); 
-    }
-</script>
-
-<!-- Tampilkan Postingan -->
 <div class="posts-container">
     @if ($posts->count() > 0)
         @foreach ($posts as $post)
@@ -44,4 +27,19 @@
     @endif
 </div>
 
+<script>
+
+    const alert = document.querySelector('.alert');
+
+    if (alert) {
+        
+        setTimeout(() => {
+            alert.classList.add('fade-out');
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 500); 
+        }, 3000); 
+    }
+</script>
 @endsection
