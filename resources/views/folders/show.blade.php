@@ -1,4 +1,4 @@
-@extends('layouts.navbar')
+@extends('lay.app')
 
 @section('content')
 <a href="{{ route('folders.index')}}" class="back-button">
