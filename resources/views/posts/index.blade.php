@@ -26,20 +26,4 @@
         <p>No posts found.</p>
     @endif
 </div>
-
-<script>
-
-    const alert = document.querySelector('.alert');
-
-    if (alert) {
-        
-        setTimeout(() => {
-            alert.classList.add('fade-out');
-            
-            setTimeout(() => {
-                alert.remove();
-            }, 500); 
-        }, 3000); 
-    }
-</script>
 @endsection

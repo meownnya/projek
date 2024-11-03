@@ -37,17 +37,17 @@
         <li>
             <a href="#" class="{{ request()->is('account') ? 'active' : '' }}"><img src="{{ asset('/images/Acc.png') }}"></a>
             <ul>
-                <a class="dropdown-item" href="#" onclick="$('#form-logout').submit()">
+                <!-- Tombol Logout -->
+                <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('form-logout').submit();">
                     <i class="icon-mid bi bi-box-arrow-left me-2"></i> 
                     Logout
                 </a>
-    
-                <form id="form-logout" action="{{route('logout')}}" method="POST">
-                    
+
+                <!-- Form Logout -->
+                <form id="form-logout" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
                 </form>
             </ul>
         </li>
     </ol>
-    
 </div>
