@@ -55,33 +55,4 @@
     </div>
 </div>
 
-<script>
-    let currentIndex = 0;
-    const sliderTrack = document.getElementById('sliderTrack');
-    const items = document.querySelectorAll('.slider-item');
-
-    function moveSlide(direction) {
-        currentIndex += direction;
-        if (currentIndex < 0) currentIndex = items.length - 1;
-        if (currentIndex >= items.length) currentIndex = 0;
-        sliderTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
-    }
-
-    const audioPlayer = document.getElementById('audioPlayer');
-    const audioButton = document.getElementById('audioButton');
-    let isPlaying = false;
-
-    function toggleAudio() {
-        if (!audioPlayer.src || audioPlayer.src === window.location.href + "#") return;
-        if (isPlaying) {
-            audioPlayer.pause();
-            audioButton.innerHTML = '<i class="bi bi-play-fill"></i>';
-        } else {
-            audioPlayer.play();
-            audioButton.innerHTML = '<i class="bi bi-pause-fill"></i>';
-        }
-        isPlaying = !isPlaying;
-    }
-</script>
-
 @endsection

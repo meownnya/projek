@@ -6,13 +6,16 @@ use App\Models\Photo;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
     public function index(Request $request)
     {
-        $posts = Post::orderBy('created_at', 'desc')->get();
-        session()->put('previous_url', url()->previous());
+        // Hanya ambil postingan milik pengguna yang login
+        $posts = Post::where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('posts.index', compact('posts'));
     }
@@ -32,7 +35,9 @@ class PostController extends Controller
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
+        // Buat postingan baru milik pengguna login
         $post = new Post();
+        $post->user_id = Auth::id();
         $post->title = $request->input('title');
         $post->description = $request->input('description');
 
@@ -61,14 +66,15 @@ class PostController extends Controller
 
     public function show(string $id)
     {
-        $post = Post::with('photos')->findOrFail($id);
+        $post = Post::with('photos')->where('user_id', Auth::id())->findOrFail($id);
 
         return view('posts.show', compact('post'));
     }
 
     public function edit(string $id)
     {
-        $post = Post::findOrFail($id);
+        $post = Post::where('user_id', Auth::id())->findOrFail($id);
+
         return view('posts.edit', compact('post'));
     }
 
@@ -82,10 +88,10 @@ class PostController extends Controller
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $post = Post::findOrFail($id);
+        $post = Post::where('user_id', Auth::id())->findOrFail($id);
 
         if ($request->hasFile('music')) {
-            if (Storage::exists('uploads/music/' . $post->music)) {
+            if ($post->music && Storage::exists('uploads/music/' . $post->music)) {
                 Storage::delete('uploads/music/' . $post->music);
             }
 
@@ -116,13 +122,13 @@ class PostController extends Controller
 
     public function destroy(string $id)
     {
-        $post = Post::findOrFail($id);
+        $post = Post::where('user_id', Auth::id())->findOrFail($id);
 
-        if (Storage::exists('uploads/music/' . $post->music)) {
+        if ($post->music && Storage::exists('uploads/music/' . $post->music)) {
             Storage::delete('uploads/music/' . $post->music);
         }
 
-        foreach (Photo::where('post_id', $post->id)->get() as $photo) {
+        foreach ($post->photos as $photo) {
             if (Storage::exists('uploads/photos/' . $photo->photo_path)) {
                 Storage::delete('uploads/photos/' . $photo->photo_path);
             }
@@ -135,7 +141,7 @@ class PostController extends Controller
 
     public function deletemusic($id)
     {
-        $post = Post::findOrFail($id);
+        $post = Post::where('user_id', Auth::id())->findOrFail($id);
 
         if (Storage::exists('uploads/music/' . $post->music)) {
             Storage::delete('uploads/music/' . $post->music);
@@ -169,7 +175,7 @@ class PostController extends Controller
             'music' => 'required|mimes:mp3,wav,mpeg|max:10000',
         ]);
 
-        $post = Post::findOrFail($id);
+        $post = Post::where('user_id', Auth::id())->findOrFail($id);
 
         if ($request->hasFile('music')) {
             $file = $request->file('music');
@@ -190,7 +196,7 @@ class PostController extends Controller
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $post = Post::findOrFail($id);
+        $post = Post::where('user_id', Auth::id())->findOrFail($id);
 
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $file) {
